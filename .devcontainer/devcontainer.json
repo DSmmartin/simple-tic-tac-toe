@@ -15,7 +15,8 @@
         "ms-vsliveshare.vsliveshare",
         "Vtrois.gitmoji-vscode",
         "Perkovec.emoji",
-        "GitHub.vscode-pull-request-github"
+        "GitHub.vscode-pull-request-github",
+        "shyykoserhiy.git-autoconfig"
     ],
     "settings": {
 		"python.pythonPath": "/usr/local/bin/python",
