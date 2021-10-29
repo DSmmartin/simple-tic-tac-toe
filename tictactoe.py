@@ -1,4 +1,7 @@
+"""Objects required to play TicTacToe game
+"""
 import numpy as np
+
 
 WINNER_STATUS = {1: 'Player 1', 2: 'Player 2', 3: 'draw', 0: None}
 
@@ -7,6 +10,12 @@ class TicTacToe:
     _board = np.empty((3, 3))
     _winner_status = 0
     _iteration = 0
+
+    def __str__(self) -> str:
+        return """
+        The game of TicTacToe.
+        Instructions link: https://en.wikipedia.org/wiki/Tic-tac-toe
+        """
 
     def __show_board(self):
         print(f'-- Board at iteration: {self._iteration}')
