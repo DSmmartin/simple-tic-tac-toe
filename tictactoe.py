@@ -27,7 +27,7 @@ class TicTacToe:
         print(self._board)  # TODO: improve visualization
 
     def __run_cycle(self):
-        self._winner_status = 1
+        self.__check_winner()
 
     def __show_winner(self):
         if (self._winner_status == 1) | (self._winner_status == 2):
@@ -39,9 +39,29 @@ class TicTacToe:
         return '-' not in self._board
 
     def __check_winner(self):
-        for line in self._length:
-            self._board[:, line]
-            self._board[line, :]
+        """Check if in each row, column or diagonal there is a winner
+        """
+        for i in range(self._length):
+            if self._board[i, 0] == self._board[i, 1] == self._board[i, 2]:
+                self._winner_status = self._board[i, 0]
+                return True
+
+        # check columns
+        for i in range(self._length):
+            if self._board[0, i] == self._board[1, i] == self._board[2, i]:
+                self._winner_status = self._board[0, i]
+                return True
+
+        # check diagonals
+        if self._board[0, 0] == self._board[1, 1] == self._board[2, 2]:
+            self._winner_status = self._board[0, 0]
+            return True
+
+        if self._board[0, 2] == self._board[1, 1] == self._board[2, 0]:
+            self._winner_status = self._board[0, 2]
+            return True
+
+        return False
 
     def start_game(self):
         print('starting game :) ')
