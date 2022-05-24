@@ -1,5 +1,6 @@
 """Objects required to play TicTacToe game
 """
+from abc import abstractclassmethod
 import random
 import numpy as np
 
@@ -30,9 +31,9 @@ class TicTacToe:
             self.__run_cycle()
             self._iteration += 1
             if self.__check_if_filled():
-                self._winner_status = 3
-        else:
-            raise StopIteration
+                self._winner_status = 3  # draw
+
+        raise StopIteration
 
     def show_board(self):
         print(f'-- Board at iteration: {self._iteration}')
@@ -82,18 +83,34 @@ class TicTacToe:
 
         return False
 
-class Player:
-    def make_a_move(self, position: int):
-        return position
 
+class IAPlayer:
+    def __init__(self, state_space, action_space) -> None:
+        self.__q_table = np.zeros((state_space, action_space))
+        self.exploration_parameters = {
+            "epsilon": 1.0,                 # Exploration rate
+            "max_epsilon": 1.0,             # Exploration probability at start
+            "min_epsilon": 0.05,            # Minimum exploration probability 
+            "decay_rate": 0.005,            # Exponential decay rate for exploration prob
+        }
 
-class HumanPlayer(Player):
-    def make_a_move(self):
-        position = int(input())  # TODO: make more robust
-        return super().make_a_move(position)
-
-
-class IAPlayer(Player):
     def make_a_move(self):
         position = round(random.uniform(0, 1))
         return super().make_a_move(position)
+
+    def epsilon_greedy_policy(self, state, action_sample):
+        # Randomly generate a number between 0 and 1
+        random_int = random.uniform(0, 1)
+        # if random_int > greater than epsilon --> exploitation
+        if random_int > self.exploration_parameters.get("epsilon"):
+            # Take the action with the highest value given a state
+            # np.argmax can be useful here
+            action = np.argmax(self.__q_table[state])
+        # else --> exploration
+        else:
+            action = action_sample
+        return action
+
+    def greedy_policy(self, state):
+        # Exploitation: take the action with the highest state, action value
+        return np.argmax(self.__q_table[state])
