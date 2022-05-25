@@ -1,21 +1,20 @@
 """Objects required to play TicTacToe game
 """
-from abc import abstractclassmethod
-import random
 import numpy as np
 
 
 WINNER_STATUS = {1: 'Player 1', 2: 'Player 2', 3: 'draw', 0: None}
+CODE_MARK_MAP = {0: ' ', 1: 'O', 2: 'X'}
 
 
 class TicTacToe:
     _length = 3
     _winner_status = 0
     _iteration = 0
+    _board = None
 
     def __init__(self) -> None:
-        self._board = np.empty((self._length, self._length), dtype='<U1')
-        self._board[:] = '-'
+        self.reset()
 
     def __str__(self) -> str:
         return """
@@ -35,9 +34,20 @@ class TicTacToe:
 
         raise StopIteration
 
-    def show_board(self):
+    def step():
+        pass
+
+    def render(self):
         print(f'-- Board at iteration: {self._iteration}')
-        print(self._board)  # TODO: improve visualization
+        current_board = self._board.copy()
+        cu_board_flatted = current_board.reshape(-1)
+        board_representation_flatted = cu_board_flatted.copy()
+        board_representation_flatted = board_representation_flatted.astype('<U1')
+        for key in CODE_MARK_MAP:
+            value = CODE_MARK_MAP.get(key)
+            board_representation_flatted[np.where(cu_board_flatted == key)] = value
+        board_representation = board_representation_flatted.reshape(-1, 3)
+        print(board_representation)
 
     def __run_cycle(self):
         self.__check_winner()
@@ -83,34 +93,8 @@ class TicTacToe:
 
         return False
 
-
-class IAPlayer:
-    def __init__(self, state_space, action_space) -> None:
-        self.__q_table = np.zeros((state_space, action_space))
-        self.exploration_parameters = {
-            "epsilon": 1.0,                 # Exploration rate
-            "max_epsilon": 1.0,             # Exploration probability at start
-            "min_epsilon": 0.05,            # Minimum exploration probability 
-            "decay_rate": 0.005,            # Exponential decay rate for exploration prob
-        }
-
-    def make_a_move(self):
-        position = round(random.uniform(0, 1))
-        return super().make_a_move(position)
-
-    def epsilon_greedy_policy(self, state, action_sample):
-        # Randomly generate a number between 0 and 1
-        random_int = random.uniform(0, 1)
-        # if random_int > greater than epsilon --> exploitation
-        if random_int > self.exploration_parameters.get("epsilon"):
-            # Take the action with the highest value given a state
-            # np.argmax can be useful here
-            action = np.argmax(self.__q_table[state])
-        # else --> exploration
-        else:
-            action = action_sample
-        return action
-
-    def greedy_policy(self, state):
-        # Exploitation: take the action with the highest state, action value
-        return np.argmax(self.__q_table[state])
+    def reset(self):
+        self._winner_status = 0
+        self._iteration = 0
+        self._board = np.empty((self._length, self._length), dtype=np.int16)
+        self._board[:] = 0

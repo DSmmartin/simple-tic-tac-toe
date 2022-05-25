@@ -1,9 +1,7 @@
 from tictactoe import TicTacToe
+from q_agent import IAPlayer
+
 
 tictacttoe_game = TicTacToe()
 print(tictacttoe_game)
-tictacttoe_game.show_board()
-for turn in tictacttoe_game:
-    tictacttoe_game.show_board()
-
-tictacttoe_game.show_winner()
+tictacttoe_game.render()
